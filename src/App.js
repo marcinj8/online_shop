@@ -1,23 +1,80 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useMemo } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+
+import { Shop } from "./shop";
+import { Navigation } from "./navigation";
+import { MainPage } from "./main";
+import { Footer } from "./footer";
+import { ContactPage } from "./contactForm";
+import { Auth } from "./auth";
+import { Cart } from "./cart";
+
+import "./App.css";
+import { useSelector, useDispatch } from "react-redux";
+import { isUserLoogedIn } from "./store/actions/userActions";
 
 function App() {
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+
+  const routes = useMemo(() => {
+    if (userData) {
+      return (
+        <React.Fragment>
+          <Route path="/shop">
+            <Shop />
+          </Route>
+          <Route path="/contact">
+            <ContactPage />
+          </Route>
+          <Route exact path="/">
+            <MainPage />
+          </Route>
+          <Redirect to="/" />
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <Route path="/contact">
+            <ContactPage />
+          </Route>
+          <Route path="/auth">
+            <Auth />
+          </Route>
+          <Route exact path="/">
+            <MainPage />
+          </Route>
+          <Redirect to="/auth" />
+        </React.Fragment>
+      );
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    dispatch(isUserLoogedIn());
+  }, [dispatch]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Router>
+        <Navigation />
+        <Cart />
+        <div
+          style={{
+            position: "relative",
+            minHeight: "100vh",
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          <Switch>{routes}</Switch>
+          <Footer />
+        </div>
+      </Router>
     </div>
   );
 }
