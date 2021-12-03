@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { errorHandler, setLoading } from "./commonActions";
+import { errorHandler, setLoading } from './commonActions';
 
 let logoutTimmer;
 
@@ -14,7 +14,7 @@ const setUserData = (response) => {
   logoutTimmer = setTimeout(logoutUser, remainingTime);
 
   localStorage.setItem(
-    "userData",
+    'userData',
     JSON.stringify({
       token,
       email,
@@ -24,7 +24,7 @@ const setUserData = (response) => {
   );
 
   return {
-    type: "SET_USER_DATA",
+    type: 'SET_USER_DATA',
     userData: {
       email,
       id,
@@ -44,7 +44,7 @@ export const getUserData = (id, email, token, tokenExpiration) => {
 
   return async (dispatch) => {
     dispatch({
-      type: "SET_USER_DATA",
+      type: 'SET_USER_DATA',
       userData,
       loading: true,
     });
@@ -56,19 +56,19 @@ export const getUserData = (id, email, token, tokenExpiration) => {
         { userData: JSON.stringify(userData) }
       );
     } catch (err) {
-      return dispatch(errorHandler("SET_ERROR_USER_DATA", err));
+      return dispatch(errorHandler('SET_ERROR_USER_DATA', err));
     }
     dispatch(setUserData(response));
   };
 };
 
 export const isUserLoogedIn = () => {
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userData = JSON.parse(localStorage.getItem('userData'));
 
   if (!userData) {
     clearTimeout(logoutTimmer);
     return {
-      type: "LOGOUT_USER",
+      type: 'LOGOUT_USER',
     };
   }
 
@@ -80,7 +80,7 @@ export const isUserLoogedIn = () => {
   }
 
   return {
-    type: "LOGOUT_USER",
+    type: 'LOGOUT_USER',
   };
 };
 
@@ -92,7 +92,7 @@ export const registerUser = (email, userName, password) => {
   });
 
   return async (dispatch) => {
-    dispatch(setLoading("SET_LOADING_USER_DATA", true));
+    dispatch(setLoading('SET_LOADING_USER_DATA', true));
 
     let response;
     try {
@@ -101,7 +101,7 @@ export const registerUser = (email, userName, password) => {
         { newUserData }
       );
     } catch (err) {
-      return dispatch(errorHandler("SET_ERROR_USER_DATA", err));
+      return dispatch(errorHandler('SET_ERROR_USER_DATA', err));
     }
     dispatch(setUserData(response));
   };
@@ -114,7 +114,7 @@ export const signInUser = (email, password) => {
   });
 
   return async (dispatch) => {
-    dispatch(setLoading("SET_LOADING_USER_DATA", true));
+    dispatch(setLoading('SET_LOADING_USER_DATA', true));
 
     let response;
     try {
@@ -123,16 +123,16 @@ export const signInUser = (email, password) => {
         { newUserData }
       );
     } catch (err) {
-      return dispatch(errorHandler("SET_ERROR_USER_DATA", err));
+      return dispatch(errorHandler('SET_ERROR_USER_DATA', err));
     }
     dispatch(setUserData(response));
   };
 };
 
 export const logoutUser = () => {
-  localStorage.removeItem("userData");
+  localStorage.removeItem('userData');
 
   return {
-    type: "LOGOUT_USER",
+    type: 'LOGOUT_USER',
   };
 };

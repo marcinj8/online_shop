@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef, useMemo } from 'react';
 
-import { Backdrop } from ".";
+import { Backdrop } from '.';
 
 import {
   StyledModal,
@@ -9,9 +9,9 @@ import {
   StyledModalFooter,
   StyledModalDefaultButton,
   StyledModalSticky,
-} from "./modal.scss";
+} from './modal.scss';
 
-import { OnShowAnimations, OnHideAnimations } from "../animations";
+import { OnShowAnimations, OnHideAnimations } from '../animations';
 
 const Modal = ({
   show,
@@ -24,12 +24,12 @@ const Modal = ({
   hideBackdrop,
   modalType,
   showAnimatonStyle = {
-    type: "none",
+    type: 'none',
     side: null,
     duration: 0.2,
   },
   hideAnimatonStyle = {
-    type: "none",
+    type: 'none',
     side: null,
     duration: 0.2,
   },
@@ -38,7 +38,7 @@ const Modal = ({
 
   const Component = useMemo(() => {
     switch (modalType) {
-      case "sticky":
+      case 'sticky':
         return StyledModalSticky;
       default:
         return StyledModal;
@@ -78,7 +78,9 @@ const Modal = ({
             <h3>{header}</h3>
           </StyledModalHeader>
         )}
-        <StyledModalChildren>{children}</StyledModalChildren>
+        <StyledModalChildren padding={modalType === 'sticky' ? '2px' : '25px'}>
+          {children}
+        </StyledModalChildren>
         {defaultCloseButton && (
           <StyledModalDefaultButton onClick={close}>
             close

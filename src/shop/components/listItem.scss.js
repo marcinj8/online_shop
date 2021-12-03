@@ -4,7 +4,7 @@ export const ListItemStyled = styled.li`
   width: 250px;
   border: 1px solid black;
   padding: 5px;
-  margin: 20px auto;
+  margin: 10px auto;
   border-radius: 5px;
   box-shadow: 10px 5px 10px black;
   transition: all 0.2s ease;

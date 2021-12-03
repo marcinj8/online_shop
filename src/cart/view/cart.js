@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { AsyncView } from '../../shared/asyncView';
@@ -9,8 +9,14 @@ import PurchasedList from '../components/purchasedList';
 import {
   getUserCart,
   toggleCartVisibility,
+  updateProductsInCart,
 } from '../../store/actions/cartActions';
-import { updateProducts, updateTotalCost } from '../data/cartData';
+import {
+  onLeaveChanges,
+  updateProducts,
+  updateTotalCost,
+} from '../data/cartData';
+import { makeCopy } from '../../shared/utils/makeCopy';
 
 import {
   StyledCartContent,
@@ -18,12 +24,15 @@ import {
   StyledCartDescription,
   StyledCartTotal,
   StyledCartList,
+  StyledCardControllers,
 } from './cart.scss';
+
 
 const Cart = () => {
   const cartState = useSelector((state) => state.cart);
   const userData = useSelector((state) => state.user.userData);
-  
+
+  const [products, setProducts] = useState(null);
   const [updatedProducts, setUpdatedProducts] = useState(null);
   const [updatedTotalCost, setUpdatedTotalCost] = useState(null);
   const dispatch = useDispatch();
@@ -41,7 +50,7 @@ const Cart = () => {
       return [];
     }
   }, [updatedProducts]);
-  
+
   useEffect(() => {
     if (
       cartState.userCart === null &&
@@ -55,8 +64,20 @@ const Cart = () => {
   }, [userData, cartState, dispatch]);
 
   useEffect(() => {
+    if (
+      cartState.userCart &&
+      cartState.userCart.products &&
+      updatedProducts === null
+    ) {
+      const copiedProducts = makeCopy(cartState.userCart.products);
+      setProducts(copiedProducts);
+    }
+  }, [cartState.userCart, updatedProducts]);
+
+  useEffect(() => {
     if (cartState.userCart && cartState.userCart.products) {
-      setUpdatedProducts(cartState.userCart.products);
+      const copiedProducts = makeCopy(cartState.userCart.products);
+      setUpdatedProducts(copiedProducts);
       setUpdatedTotalCost(cartState.userCart.totalAmount);
     }
   }, [cartState.userCart]);
@@ -70,7 +91,15 @@ const Cart = () => {
   return (
     <Modal
       modalType='sticky'
-      close={() => dispatch(toggleCartVisibility(false))}
+      close={() =>
+        onLeaveChanges(
+          setUpdatedProducts,
+          products,
+          toggleCartVisibility,
+          false,
+          dispatch
+        )
+      }
       show={cartState.showCart}
       showAnimatonStyle={{
         type: 'slideHorizontally',
@@ -84,12 +113,14 @@ const Cart = () => {
       }}
       zIndex='1000'
     >
-      <StyledCartContent style={{ height: '60%', overflow: 'auto' }}>
-        <AsyncView
-          isLoading={cartState.loading}
-          isError={cartState.error}
-          errorMessage={cartState.errorMessage}
-        />
+      <StyledCartContent>
+        {cartState.showCart && (
+          <AsyncView
+            isLoading={cartState.loading}
+            isError={cartState.error}
+            errorMessage={cartState.errorMessage}
+          />
+        )}
         <StyledCartTitle>Cart</StyledCartTitle>
         {updatedProducts && updatedProducts.length ? (
           <StyledCartList>{purchasedItems}</StyledCartList>
@@ -100,14 +131,43 @@ const Cart = () => {
           Total: {cartState.userCart && updatedTotalCost ? updatedTotalCost : 0}{' '}
           Eur
         </StyledCartTotal>
+        <div>address of delivery</div>
+        <div>City</div>
+        <div>Street || postal code</div>
+        <div>Country</div>
       </StyledCartContent>
-      <Button
-        buttonType='primary'
-        disabled={updatedProducts === null}
-        template='CONFIRM'
-        styled={{ background: 'rgba(162, 222, 208, .6)' }}
-        // clicked={purchaseItem} CONFIRM CHANGES
-      />
+      <StyledCardControllers>
+        <Button
+          buttonType='primary'
+          disabled={updatedProducts === null}
+          template='CONFIRM'
+          styled={{ background: 'rgba(162, 222, 208, .6)' }}
+          clicked={() =>
+            dispatch(
+              updateProductsInCart(
+                updatedProducts,
+                userData.token,
+                cartState.userCart
+              )
+            )
+          }
+        />
+        <Button
+          buttonType='primary'
+          disabled={updatedProducts === null}
+          template='CANCEL'
+          styled={{ background: 'pink' }}
+          clicked={() =>
+            onLeaveChanges(
+              setUpdatedProducts,
+              products,
+              toggleCartVisibility,
+              true,
+              dispatch
+            )
+          }
+        />
+      </StyledCardControllers>
       <Button
         buttonType='primary'
         styled={{
@@ -117,7 +177,15 @@ const Cart = () => {
           width: '40px',
           height: '40px',
         }}
-        clicked={() => dispatch(toggleCartVisibility(false))}
+        clicked={() =>
+          onLeaveChanges(
+            setUpdatedProducts,
+            products,
+            toggleCartVisibility,
+            false,
+            dispatch
+          )
+        }
         template='x'
       />
     </Modal>

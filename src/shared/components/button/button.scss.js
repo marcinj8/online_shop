@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const StyledButton = styled.button`
   width: ${(props) => (props.width ? props.width : "auto")};
+  margin: ${(props) => (props.margin ? props.margin : "0")};
   height: ${(props) => (props.height ? props.height : "auto")};
   position: ${(props) => (props.position ? props.position : "static")};
   top: ${(props) => (props.top ? props.top : "5px")};

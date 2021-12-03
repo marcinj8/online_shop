@@ -1,3 +1,5 @@
+import { makeCopy } from '../../shared/utils/makeCopy';
+
 const incraseQuantity = (productsUpdated, productIndex, setUpdatedProducts) => {
   const product = productsUpdated[productIndex];
   product.quantity = product.quantity + 1;
@@ -44,10 +46,22 @@ export const updateProducts = (
 };
 
 export const updateTotalCost = (updatedProducts, setUpdatedTotalCost) => {
-    let totalCostUpdated = 0;
-    updatedProducts.forEach((item) => {
-      totalCostUpdated =
-        Math.round((totalCostUpdated + item.price * item.quantity) * 100) / 100;
-    });
-    setUpdatedTotalCost(totalCostUpdated);
-  };
+  let totalCostUpdated = 0;
+  updatedProducts.forEach((item) => {
+    totalCostUpdated =
+      Math.round((totalCostUpdated + item.price * item.quantity) * 100) / 100;
+  });
+  setUpdatedTotalCost(totalCostUpdated);
+};
+
+export const onLeaveChanges = (
+  clearChanges,
+  products,
+  visibilityToggler,
+  isCartVisible,
+  dispatch
+) => {
+  const copiedProducts = makeCopy(products)
+  clearChanges(copiedProducts);
+  dispatch(visibilityToggler(isCartVisible));
+};

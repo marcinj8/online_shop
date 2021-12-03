@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledModal = styled.div`
   position: fixed;
@@ -18,17 +18,9 @@ export const StyledModal = styled.div`
 `;
 
 export const StyledModalSticky = styled(StyledModal)`
-  top: 50%;
   left: 0;
   transform: translate(0, -50%);
-  z-index: ${(props) => props.zIndex + 10 || 100};
-  overflow: hidden;
-  min-width: 300px;
-  width: 90%;
-  height: 70%;
-  max-width: 500px;
-  box-shadow: 5px 5px 10px;
-  visibility: hidden;
+  height: 80%;
 `;
 
 export const StyledModalHeader = styled.div`
@@ -38,7 +30,7 @@ export const StyledModalHeader = styled.div`
 `;
 
 export const StyledModalChildren = styled.div`
-  padding: 25px;
+  padding: ${(props) => (props.padding ? props.padding : '25px')};
 `;
 
 export const StyledModalDefaultButton = styled.button`
