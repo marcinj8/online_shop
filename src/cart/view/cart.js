@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { AsyncView } from '../../shared/asyncView';
 import { Button } from '../../shared/components/button';
 import { Modal } from '../../shared/modal';
 import PurchasedList from '../components/purchasedList';
+import OrderDetails from '../components/orderDetails';
 
 import {
   getUserCart,
@@ -16,7 +17,7 @@ import {
   updateProducts,
   updateTotalCost,
 } from '../data/cartData';
-import { makeCopy } from '../../shared/utils/makeCopy';
+import { makeCopy } from '../../utils/makeCopy';
 
 import {
   StyledCartContent,
@@ -26,7 +27,6 @@ import {
   StyledCartList,
   StyledCardControllers,
 } from './cart.scss';
-
 
 const Cart = () => {
   const cartState = useSelector((state) => state.cart);
@@ -131,10 +131,7 @@ const Cart = () => {
           Total: {cartState.userCart && updatedTotalCost ? updatedTotalCost : 0}{' '}
           Eur
         </StyledCartTotal>
-        <div>address of delivery</div>
-        <div>City</div>
-        <div>Street || postal code</div>
-        <div>Country</div>
+        <OrderDetails />
       </StyledCartContent>
       <StyledCardControllers>
         <Button
@@ -176,6 +173,8 @@ const Cart = () => {
           background: 'pink',
           width: '40px',
           height: '40px',
+          top: '5px',
+          right: '5px',
         }}
         clicked={() =>
           onLeaveChanges(

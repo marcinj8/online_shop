@@ -51,6 +51,7 @@ export const getUserData = (id, email, token, tokenExpiration) => {
 
     let response;
     try {
+      // zmienić na get i dodać id w linku
       response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/user/get-user`,
         { userData: JSON.stringify(userData) }

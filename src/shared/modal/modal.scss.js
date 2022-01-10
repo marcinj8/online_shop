@@ -20,7 +20,8 @@ export const StyledModal = styled.div`
 export const StyledModalSticky = styled(StyledModal)`
   left: 0;
   transform: translate(0, -50%);
-  height: 80%;
+  overflow: auto;
+  height: 100%;
 `;
 
 export const StyledModalHeader = styled.div`

@@ -1,9 +1,18 @@
 import Axios from 'axios';
+import { UserCart } from '../../shared/models/userCartModel';
 
 import { setLoading, errorHandler } from './commonActions';
 
 const updateBasket = (cartUpdated) => {
-  const userCart = JSON.parse(cartUpdated);
+  const userCartData = JSON.parse(cartUpdated);
+  const userCart = new UserCart(
+    userCartData.userId,
+    userCartData._id,
+    userCartData.products,
+    userCartData.totalCost,
+    userCartData.addressOfDelivery
+  );
+
   return {
     type: 'UPDATE_CART',
     userCart,
@@ -67,10 +76,37 @@ export const updateProductsInCart = (products, token) => {
       }
     )
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         dispatch(updateProducts(res.data.products));
       })
       .catch((err) => {
+        dispatch(errorHandler('SET_ERROR_CART', err));
+      });
+  };
+};
+
+export const updateAddressOfDelivery = (addressData, userData) => {
+  // token expiration? undefined
+  console.log(addressData, userData);
+  const addressOfDelivery = Object.keys(addressData).map((item) => ({
+    [item]: addressData[item].value,
+  }));
+  console.log(addressOfDelivery, userData.token);
+  return async (dispatch) => {
+    dispatch(setLoading('SET_LOADING_CART', true));
+    Axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/cart/update-address`,
+      {
+        addressOfDelivery: JSON.stringify(addressOfDelivery),
+      },
+      { headers: { Authorization: 'Bearer ' + userData.token } }
+    )
+      .then((res) => {
+        console.log(res);
+        dispatch(setLoading('SET_LOADING_CART', false));
+      })
+      .catch((err) => {
+        console.log(err);
         dispatch(errorHandler('SET_ERROR_CART', err));
       });
   };

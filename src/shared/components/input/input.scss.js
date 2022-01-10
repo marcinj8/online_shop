@@ -4,7 +4,8 @@ const InputSytled = styled.input`
   width: 80%;
   outline: none;
   height: 35px;
-  margin: 10px auto;
+  margin: ${(props) =>
+    props.styled && props.styled.margin ? props.styled.margin : '10px auto'};
   padding: 5px 10px;
   font-size: 1.1em;
   &:focus {

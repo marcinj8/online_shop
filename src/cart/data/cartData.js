@@ -1,4 +1,83 @@
-import { makeCopy } from '../../shared/utils/makeCopy';
+import { makeCopy } from '../../utils/makeCopy';
+import * as validators from '../../shared/components/input/validators';
+
+export const formData = {
+  fullName: {
+    value: '',
+    isValid: false,
+    placeholder: 'full name',
+    type: 'text',
+    validators: [validators.VALIDATOR_REQUIRE()],
+  },
+  street: {
+    value: '',
+    isValid: false,
+    placeholder: 'street',
+    type: 'text',
+    validators: [validators.VALIDATOR_REQUIRE()],
+  },
+  city: {
+    value: '',
+    isValid: false,
+    placeholder: 'city',
+    type: 'text',
+    validators: [validators.VALIDATOR_REQUIRE()],
+  },
+  postalCode: {
+    value: '',
+    isValid: false,
+    placeholder: 'postal code',
+    type: 'number',
+    validators: [
+      validators.VALIDATOR_REQUIRE(),
+      validators.VALIDATOR_MAXLENGTH(5),
+      validators.VALIDATOR_MINLENGTH(5),
+    ],
+  },
+  country: {
+    value: '',
+    isValid: false,
+    placeholder: 'country',
+    type: 'text',
+    validators: [validators.VALIDATOR_REQUIRE()],
+  },
+  phone: {
+    value: '',
+    isValid: false,
+    placeholder: 'phone number',
+    type: 'number',
+    validators: [validators.VALIDATOR_REQUIRE()],
+  },
+};
+
+const validateAddressOfDelivery = (addressOfDelivery) => {
+  let isValid = true;
+  let counter = 0;
+  if (!addressOfDelivery || typeof addressOfDelivery !== 'object') {
+    return false;
+  }
+
+  Object.keys(addressOfDelivery).forEach((element) => {
+    isValid = isValid && !!addressOfDelivery[element];
+    counter++;
+  });
+
+  if (counter !== 6) {
+    isValid = false;
+  }
+
+  return isValid;
+};
+
+export const validateCart = (products, addressOfDelivery, payment) => {
+  let isCartValid = {
+    products: products.length > 0 ? true : false,
+    addressOfDelivery: validateAddressOfDelivery(addressOfDelivery),
+    payment: !!payment,
+  };
+
+  return isCartValid;
+};
 
 const incraseQuantity = (productsUpdated, productIndex, setUpdatedProducts) => {
   const product = productsUpdated[productIndex];
@@ -61,7 +140,7 @@ export const onLeaveChanges = (
   isCartVisible,
   dispatch
 ) => {
-  const copiedProducts = makeCopy(products)
+  const copiedProducts = makeCopy(products);
   clearChanges(copiedProducts);
   dispatch(visibilityToggler(isCartVisible));
 };

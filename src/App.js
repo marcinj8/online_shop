@@ -1,22 +1,23 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
-} from "react-router-dom";
+} from 'react-router-dom';
 
-import { Shop } from "./shop";
-import { Navigation } from "./navigation";
-import { MainPage } from "./main";
-import { Footer } from "./footer";
-import { ContactPage } from "./contactForm";
-import { Auth } from "./auth";
-import { Cart } from "./cart";
+import { Shop } from './shop';
+import { Navigation } from './navigation';
+import { MainPage } from './main';
+import { Footer } from './footer';
+import { ContactPage } from './contactForm';
+import { Auth } from './auth';
+import { Cart } from './cart';
 
-import "./App.css";
-import { useSelector, useDispatch } from "react-redux";
-import { isUserLoogedIn } from "./store/actions/userActions";
+import './App.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { isUserLoogedIn } from './store/actions/userActions';
+import { MyProfile } from './myProfile';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,31 +27,34 @@ function App() {
     if (userData) {
       return (
         <React.Fragment>
-          <Route path="/shop">
+          <Route path='/shop'>
             <Shop />
           </Route>
-          <Route path="/contact">
+          <Route path='/contact'>
             <ContactPage />
           </Route>
-          <Route exact path="/">
+          <Route path='/profile'>
+            <MyProfile />
+          </Route>
+          <Route exact path='/'>
             <MainPage />
           </Route>
-          <Redirect to="/" />
+          <Redirect to='/' />
         </React.Fragment>
       );
     } else {
       return (
         <React.Fragment>
-          <Route path="/contact">
+          <Route path='/contact'>
             <ContactPage />
           </Route>
-          <Route path="/auth">
+          <Route path='/auth'>
             <Auth />
           </Route>
-          <Route exact path="/">
+          <Route exact path='/'>
             <MainPage />
           </Route>
-          <Redirect to="/auth" />
+          <Redirect to='/auth' />
         </React.Fragment>
       );
     }
@@ -61,14 +65,14 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div className="App">
+    <div className='App'>
       <Router>
         <Navigation />
         <Cart />
         <div
           style={{
-            position: "relative",
-            minHeight: "100vh",
+            position: 'relative',
+            minHeight: '100vh',
           }}
         >
           <Switch>{routes}</Switch>

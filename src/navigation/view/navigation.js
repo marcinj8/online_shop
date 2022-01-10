@@ -1,33 +1,42 @@
-import React, { useRef, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { NavigationItem } from "../components";
-import { SideBar } from "./";
-import { Button } from "../../shared/components/button";
+import { NavigationItem } from '../components';
+import { SideBar } from './';
+import { Button } from '../../shared/components/button';
 
-import { logoutUser } from "../../store/actions/userActions";
-import { NavAnimations } from "../animations/";
+import { logoutUser } from '../../store/actions/userActions';
+import { NavAnimations } from '../animations/';
 
-import { NavigationStyled } from "./navigation.scss";
-import { toggleCartVisibility } from "../../store/actions/cartActions";
+import {
+  NavigationStyled,
+  StyledCartNavContainer,
+  StyledPurchasedItemNumber,
+} from './navigation.scss';
+import { toggleCartVisibility } from '../../store/actions/cartActions';
 
 const NAVIGATION_DATA = [
   {
-    name: "HOME",
-    link: "/",
+    name: 'HOME',
+    link: '/',
   },
   {
-    name: "SHOP",
-    link: "/shop",
+    name: 'SHOP',
+    link: '/shop',
     conditions: { auth: true },
   },
   {
-    name: "CONTACT",
-    link: "/contact",
+    name: 'PROFILE',
+    link: '/profile',
+    conditions: { auth: true },
   },
   {
-    name: "AUTH",
-    link: "/auth",
+    name: 'CONTACT',
+    link: '/contact',
+  },
+  {
+    name: 'AUTH',
+    link: '/auth',
     conditions: { auth: false },
   },
 ];
@@ -35,6 +44,7 @@ const NAVIGATION_DATA = [
 const Navigation = () => {
   const navRef = useRef(null);
   const userState = useSelector((state) => state.user);
+  const cartState = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   const navigationItems = NAVIGATION_DATA.map((navItem, i) => {
@@ -50,21 +60,32 @@ const Navigation = () => {
 
   const navigationContent = (
     <React.Fragment>
-      {userState.userData && <Button 
-        clicked={()=>dispatch(toggleCartVisibility(true))}
-      template="cartIcon" buttonType="icon" />}
+      {userState.userData && (
+        <StyledCartNavContainer>
+          {cartState.userCart && cartState.userCart.products.length > 0 && (
+            <StyledPurchasedItemNumber>
+              {cartState.userCart.products.length}
+            </StyledPurchasedItemNumber>
+          )}
+          <Button
+            clicked={() => dispatch(toggleCartVisibility(true))}
+            template='cartIcon'
+            buttonType='icon'
+          />
+        </StyledCartNavContainer>
+      )}
       {navigationItems}
       {userState.userData && (
         <Button
           styled={{
-            background: "transparent",
-            color: "red",
-            fontSize: "1.1rem",
-            fontWeight: "bold",
-            textShadow: "0 0 2px white",
+            background: 'transparent',
+            color: 'red',
+            fontSize: '1.1rem',
+            fontWeight: 'bold',
+            textShadow: '0 0 2px white',
           }}
-          template="logout"
-          buttonType="inline"
+          template='logout'
+          buttonType='inline'
           clicked={() => dispatch(logoutUser())}
         />
       )}

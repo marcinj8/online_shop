@@ -2,6 +2,11 @@ import React from 'react';
 
 import { Button } from '../../shared/components/button';
 
+import {
+  SyledItemListCart,
+  SyledItemListTitleCart,
+} from './purchasedList.scss';
+
 const PurchasedList = ({
   updatedProducts,
   updateProducts,
@@ -11,14 +16,8 @@ const PurchasedList = ({
   updatedProducts.forEach((item) => {
     if (item.quantity >= 1) {
       list.push(
-        <li
-          style={{
-            width: '95%',
-            margin: '0 auto',
-          }}
-          key={item.id}
-        >
-          <h4>{item.title}</h4>
+        <SyledItemListCart key={item.id}>
+          <SyledItemListTitleCart>{item.title}</SyledItemListTitleCart>
           <div>quantity: {item.quantity}</div>
           <Button
             template='-'
@@ -57,7 +56,7 @@ const PurchasedList = ({
               )
             }
           />
-        </li>
+        </SyledItemListCart>
       );
     }
   });

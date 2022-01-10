@@ -10,7 +10,8 @@ const NavigationItem = ({ name, link, conditions }) => {
   const linkRef = useRef(null);
   const activeLink = {
     textDecoration: "underline",
-    color: "blue",
+    textShadow: '0 0 3px black',
+    color: "rgb(0, 212, 155)",
     fontWeight: "bold",
   };
 

@@ -1,3 +1,5 @@
+import { validateCart } from '../../cart/data/cartData';
+
 const initialState = {
   loading: false,
   error: false,
@@ -9,7 +11,14 @@ const initialState = {
 const updateUserCart = (state, userCart) => {
   return {
     ...state,
-    userCart,
+    userCart: {
+      ...userCart,
+      cartValidation: validateCart(
+        userCart.products,
+        userCart.addressOfDelivery,
+        userCart.payment
+      ),
+    },
     loading: false,
     error: false,
   };
@@ -21,6 +30,11 @@ const updateUserProducts = (state, products) => {
     userCart: {
       ...state.userCart,
       products: products,
+      cartValidation: validateCart(
+        products,
+        state.addressOfDelivery,
+        state.payment
+      ),
     },
     loading: false,
     error: false,
@@ -39,7 +53,6 @@ const setLoading = (state, loading, error, errorMessage) => {
 };
 
 const setError = (state, errorMessage) => {
-  console.log(errorMessage);
   return {
     ...state,
     loading: false,

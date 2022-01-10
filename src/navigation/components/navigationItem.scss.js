@@ -27,8 +27,5 @@ export const NavigationItemStyled = styled.li`
     width: 130px;
     height: 100%;
     margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 `;

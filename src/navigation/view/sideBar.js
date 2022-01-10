@@ -1,9 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from 'react';
 
-import { Backdrop } from "../../shared/modal";
+import { Backdrop } from '../../shared/modal';
 
-import { SideBarStyled, BurgerStyled } from "./navigation.scss";
-import { NavAnimations } from "../animations";
+import { SideBarStyled, BurgerStyled, StyledHeaderSideBar } from './navigation.scss';
+import { NavAnimations } from '../animations';
+import { Button } from '../../shared/components/button';
 
 const SideBar = ({ children }) => {
   const [showSideBar, setShowSideBar] = useState(false);
@@ -24,25 +25,25 @@ const SideBar = ({ children }) => {
         <div />
         <div />
       </BurgerStyled>
-      <Backdrop show={showSideBar} close={() => setShowSideBar(false)} />
+      <Backdrop show={showSideBar} close={() => setShowSideBar(false)}
+        hideMin='800px'
+      />
       <SideBarStyled ref={sideBarRef}>
-        <h2>
-          Online Shopping
-        </h2>
+        <StyledHeaderSideBar>Online Shopping</StyledHeaderSideBar>
         {children}
-        <button
-          style={{
-            height: "50px",
-            outline: "none",
-            border: "none",
-            color: "red",
-            background: "transparent",
-            cursor: "pointer",
+        <Button
+          buttonType='inline'
+          template='close'
+          styled={{
+            color: 'red',
+            position: 'absolute',
+            bottom: '5%',
+            left: '50%',
+            width: '150px',
+            transform: 'translateX(-50%)'
           }}
-          onClick={() => setShowSideBar(false)}
-        >
-          CLOSE
-        </button>
+          clicked={() => setShowSideBar(false)}
+        />
       </SideBarStyled>
     </React.Fragment>
   );

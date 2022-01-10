@@ -39,6 +39,7 @@ const Input = (props) => {
     errorMessage,
     name,
     type,
+    styled,
   } = props;
 
   const initialState = {
@@ -84,7 +85,7 @@ const Input = (props) => {
 
   return (
     <InputContainerStyled>
-      <label htmlFor={name}>{label}</label>
+      {label && <label htmlFor={name}>{label}</label>}
       <FormElement
         name={name}
         type={type}
@@ -92,6 +93,7 @@ const Input = (props) => {
         danger={!inputState.isValid && inputState.isTouched}
         onChange={changeHandler}
         id={name}
+        styled={styled}
         placeholder={placeholder}
         onBlur={touchedHandler}
       />

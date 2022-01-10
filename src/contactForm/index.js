@@ -1,1 +1,1 @@
-export { ContactPage } from "./page";
+export { ContactPage } from "./view";
