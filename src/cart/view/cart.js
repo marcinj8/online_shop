@@ -13,6 +13,7 @@ import {
   updateProductsInCart,
 } from '../../store/actions/cartActions';
 import {
+  checkIsCartValid,
   onLeaveChanges,
   updateProducts,
   updateTotalCost,
@@ -35,6 +36,7 @@ const Cart = () => {
   const [products, setProducts] = useState(null);
   const [updatedProducts, setUpdatedProducts] = useState(null);
   const [updatedTotalCost, setUpdatedTotalCost] = useState(null);
+  const [isCartValid, setIsCartValid] = useState(false);
   const dispatch = useDispatch();
 
   const purchasedItems = useMemo(() => {
@@ -87,6 +89,17 @@ const Cart = () => {
       updateTotalCost(updatedProducts, setUpdatedTotalCost);
     }
   }, [updatedProducts]);
+
+  useEffect(() => {
+    if (cartState.userCart && !!cartState.userCart.cartValidation) {
+      const isValid = checkIsCartValid(cartState.userCart.cartValidation);
+      setIsCartValid(isValid);
+    }
+  }, [cartState.userCart]);
+
+  if (!userData) {
+    return null;
+  }
 
   return (
     <Modal
@@ -165,6 +178,13 @@ const Cart = () => {
           }
         />
       </StyledCardControllers>
+      <Button
+        buttonType='primary'
+        disabled={!isCartValid}
+        template='ORDER'
+        styled={{ background: 'rgba(162, 222, 208, .6)' }}
+        clicked={() => console.log('ordered', cartState.userCart)}
+      />
       <Button
         buttonType='primary'
         styled={{

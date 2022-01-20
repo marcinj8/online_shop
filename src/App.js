@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,12 +16,20 @@ import { Cart } from './cart';
 
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { isUserLoogedIn } from './store/actions/userActions';
+import { isUserLoogedIn, logoutUser } from './store/actions/userActions';
 import { MyProfile } from './myProfile';
 
 function App() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
+  const remainingTime = useRef(null);
+
+  let logoutTimmer = useCallback(
+    (time) => {
+      setTimeout(() => dispatch(logoutUser()), time);
+    },
+    [dispatch]
+  );
 
   const routes = useMemo(() => {
     if (userData) {
@@ -63,6 +71,16 @@ function App() {
   useEffect(() => {
     dispatch(isUserLoogedIn());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!!userData && !remainingTime.current) {
+      remainingTime.current = userData.remainingTime;
+      logoutTimmer(remainingTime.current);
+    } else if (!userData && remainingTime.current) {
+      remainingTime.current = null;
+      clearTimeout(logoutTimmer);
+    }
+  }, [userData, dispatch, logoutTimmer]);
 
   return (
     <div className='App'>

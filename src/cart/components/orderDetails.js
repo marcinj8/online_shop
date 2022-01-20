@@ -6,7 +6,11 @@ import { useForm } from '../../shared/hooks/form-hook';
 import OrderDatailItem from './orderDetailItem';
 
 import { updateAddressOfDelivery } from '../../store/actions/cartActions';
-import { StyledAddressData, StyledOrderDetailsList } from './orderDetails.scss';
+import {
+  StyledAddressData,
+  StyledOrderDetailsList,
+  StyledOrderDetailsHeader,
+} from './orderDetails.scss';
 import { formData } from '../data/cartData';
 
 import { rollUp } from '../../shared/animations/onHideAnimation';
@@ -18,14 +22,20 @@ const OrderDetails = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const addressDataRef = useRef(null);
   const showCart = useSelector((state) => state.cart.showCart);
+  const userCart = useSelector((state) => state.cart.userCart);
   const user = useSelector((state) => state.user.userData);
   const dispatch = useDispatch();
 
-  const { formState, changeHandler } = useForm(formData, false);
+  const { formState, changeHandler, setFormData, clearFormData } = useForm(
+    formData,
+    false
+  );
+
   const orderDetailsList = Object.keys(formData).map((item) => (
     <OrderDatailItem
       key={item}
       itemType={formData[item].type}
+      userCart={userCart}
       itemPlaceholder={formData[item].placeholder}
       itemName={item}
       itemVlaidators={formData[item].validators}
@@ -39,6 +49,19 @@ const OrderDetails = () => {
     setShowDetails((prevState) => !prevState);
     setIsEditMode(false);
   };
+
+  useEffect(() => {
+    if (userCart && userCart.addressOfDelivery && !formState.isFormValid) {
+      const initialValues = {};
+      for (let property in userCart.addressOfDelivery) {
+        initialValues[property] = {
+          value: userCart.addressOfDelivery[property],
+          isValid: true,
+        };
+      }
+      setFormData(initialValues, true);
+    }
+  }, [userCart, formState, setFormData]);
 
   useEffect(() => {
     if (!showCart) {
@@ -60,18 +83,21 @@ const OrderDetails = () => {
 
   return (
     <React.Fragment>
-      <h3>order details</h3>
+      <StyledOrderDetailsHeader>order details</StyledOrderDetailsHeader>
       <StyledAddressData ref={addressDataRef} show={showDetails}>
         <h4>address of delivery</h4>
         <StyledOrderDetailsList>{orderDetailsList}</StyledOrderDetailsList>
         <OrderDetailsControllers
           isEditMode={isEditMode}
-          // isFormValid={formState.isFormValid} // temporary blocked due fix problem with validation
-          isFormValid={true}
+          isFormValid={formState.isFormValid}
           setIsEditMode={setIsEditMode}
           onConfirmAddressChanges={() => {
             setIsEditMode(false);
             dispatch(updateAddressOfDelivery(formState.inputs, user));
+          }}
+          onCancel={() => {
+            setIsEditMode(false);
+            clearFormData();
           }}
         />
       </StyledAddressData>

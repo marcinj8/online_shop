@@ -15,6 +15,7 @@ const OrderDatailItem = ({
   formState,
   changeHandler,
 }) => {
+
   return (
     <StyledOrderDetailsListItem>
       <h5 style={{ marginLeft: '45px' }}>{itemPlaceholder.toUpperCase()}:</h5>

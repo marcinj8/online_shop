@@ -6,6 +6,7 @@ const OrderDetailsControllers = ({
   isFormValid,
   setIsEditMode,
   onConfirmAddressChanges,
+  onCancel
 }) => {
   return (
     <React.Fragment>
@@ -16,7 +17,7 @@ const OrderDetailsControllers = ({
           showEnableAnimation
           disabled={!isFormValid}
           styled={{ color: 'green' }}
-          clicked={onConfirmAddressChanges} //save in userCart.addressOfDelivery
+          clicked={onConfirmAddressChanges}
         />
       )}
       {isEditMode && (
@@ -24,7 +25,7 @@ const OrderDetailsControllers = ({
           buttonType='inline'
           template='cancel'
           styled={{ color: 'red' }}
-          clicked={() => setIsEditMode(false)}
+          clicked={onCancel}
         />
       )}
       {!isEditMode && (

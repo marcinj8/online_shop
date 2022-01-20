@@ -73,10 +73,19 @@ export const validateCart = (products, addressOfDelivery, payment) => {
   let isCartValid = {
     products: products.length > 0 ? true : false,
     addressOfDelivery: validateAddressOfDelivery(addressOfDelivery),
-    payment: !!payment,
+    payment: true,
   };
 
   return isCartValid;
+};
+
+export const checkIsCartValid = (validationArr) => {
+  let isValid = true;
+  for (let key in validationArr) {
+    isValid = isValid && validationArr[key];
+    console.log(validationArr[key]);
+  }
+  return isValid;
 };
 
 const incraseQuantity = (productsUpdated, productIndex, setUpdatedProducts) => {

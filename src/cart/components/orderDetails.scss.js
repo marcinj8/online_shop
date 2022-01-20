@@ -10,6 +10,13 @@ export const StyledAddressData = styled.div`
   overflow: hidden;
 `;
 
+export const StyledOrderDetailsHeader = styled.h3`
+  text-decoration: underline;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+`;
+
+
 export const StyledOrderDetailsList = styled.ul`
   width: 40%;
   min-width: 280px;

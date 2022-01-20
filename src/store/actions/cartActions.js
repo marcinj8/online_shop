@@ -87,11 +87,12 @@ export const updateProductsInCart = (products, token) => {
 
 export const updateAddressOfDelivery = (addressData, userData) => {
   // token expiration? undefined
-  console.log(addressData, userData);
-  const addressOfDelivery = Object.keys(addressData).map((item) => ({
-    [item]: addressData[item].value,
-  }));
-  console.log(addressOfDelivery, userData.token);
+  let addressOfDelivery = {};
+  for (let property in addressData) {
+    console.log(property, addressData[property].value);
+    addressOfDelivery[property] = addressData[property].value;
+  }
+
   return async (dispatch) => {
     dispatch(setLoading('SET_LOADING_CART', true));
     Axios.post(

@@ -21,6 +21,8 @@ export const StyledButton = styled.button`
   &:disabled {
     cursor: not-allowed;
     color: gray;
+    box-shadow: 1px 1px 2px gray;
+    background: silver;
   }
   &:enabled {
     animation: ${(props) =>
@@ -62,6 +64,12 @@ export const StyledInlineButton = styled(StyledButton)`
   border: none;
   text-decoration: underline;
   outline: none;
+  &:disabled {
+    cursor: not-allowed;
+    color: gray;
+    box-shadow: none;
+    background: transparent;
+  }
 `;
 
 export const StyledIconButton = styled(StyledButton)`

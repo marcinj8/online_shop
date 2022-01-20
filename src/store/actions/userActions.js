@@ -2,16 +2,17 @@ import axios from 'axios';
 
 import { errorHandler, setLoading } from './commonActions';
 
-let logoutTimmer;
+export const logoutUser = () => {
+  localStorage.removeItem('userData');
+  return { type: 'LOGOUT_USER' };
+};
 
 const setUserData = (response) => {
   const { email, id, token, tokenExpiration } = response.data;
-
   const tokenExpirationDate =
-    tokenExpiration || new Date(new Date().getTime() + 1000 * 60 * 60);
+    tokenExpiration || new Date(new Date().getTime() + 1000 * 360);
   const currentDate = new Date().getTime();
   const remainingTime = new Date(tokenExpirationDate).getTime() - currentDate;
-  logoutTimmer = setTimeout(logoutUser, remainingTime);
 
   localStorage.setItem(
     'userData',
@@ -29,7 +30,8 @@ const setUserData = (response) => {
       email,
       id,
       token,
-      tokenExpiration,
+      tokenExpirationDate,
+      remainingTime,
     },
   };
 };
@@ -51,7 +53,6 @@ export const getUserData = (id, email, token, tokenExpiration) => {
 
     let response;
     try {
-      // zmienić na get i dodać id w linku
       response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/user/get-user`,
         { userData: JSON.stringify(userData) }
@@ -67,10 +68,7 @@ export const isUserLoogedIn = () => {
   const userData = JSON.parse(localStorage.getItem('userData'));
 
   if (!userData) {
-    clearTimeout(logoutTimmer);
-    return {
-      type: 'LOGOUT_USER',
-    };
+    return logoutUser();
   }
 
   const { token, tokenExpiration, id, email } = userData;
@@ -80,9 +78,7 @@ export const isUserLoogedIn = () => {
     return getUserData(id, email, token, tokenExpiration);
   }
 
-  return {
-    type: 'LOGOUT_USER',
-  };
+  return logoutUser();
 };
 
 export const registerUser = (email, userName, password) => {
@@ -127,13 +123,5 @@ export const signInUser = (email, password) => {
       return dispatch(errorHandler('SET_ERROR_USER_DATA', err));
     }
     dispatch(setUserData(response));
-  };
-};
-
-export const logoutUser = () => {
-  localStorage.removeItem('userData');
-
-  return {
-    type: 'LOGOUT_USER',
   };
 };
