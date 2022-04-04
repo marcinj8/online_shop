@@ -1,9 +1,9 @@
-import { registerUser, signInUser } from "../../store/actions/userActions";
+import { registerUser, signInUser } from '../../store/actions/userActions';
 
 export const onAuth = (e, formState, isLoginMode, dispatch) => {
   e.preventDefault();
   const authData = { ...formState };
-  
+
   if (isLoginMode) {
     delete authData.inputs.userName;
   }
@@ -17,4 +17,33 @@ export const onAuth = (e, formState, isLoginMode, dispatch) => {
   } else {
     dispatch(registerUser(...userData));
   }
+};
+
+export const switchAuthMode = (
+  isLoginMode,
+  formState,
+  setFormData,
+  setIsLoginMode
+) => {
+  if (!isLoginMode) {
+    setFormData(
+      {
+        ...formState.inputs,
+        userName: undefined,
+      },
+      formState.inputs.email.isValid && formState.inputs.password.isValid
+    );
+  } else {
+    setFormData(
+      {
+        ...formState.inputs,
+        userName: {
+          value: '',
+          isValid: false,
+        },
+      },
+      false
+    );
+  }
+  setIsLoginMode((prevMode) => !prevMode);
 };

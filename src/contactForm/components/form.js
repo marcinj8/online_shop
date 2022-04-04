@@ -7,13 +7,14 @@ import {
 } from '../../shared/components/input/validators';
 
 import { useForm } from '../../shared/hooks/form-hook';
+import { sendData } from '../data/contactFormData';
 
 import {
   FormStyled,
   FormInputsContainerStyled,
   FormInputsBlockStyled,
   FormButtonStyled,
-} from './form.scss';
+} from '../style/form.scss';
 
 const Form = () => {
   const { formState, changeHandler } = useForm(
@@ -38,23 +39,14 @@ const Form = () => {
     false
   );
 
-  const sendData = (e) => {
-    e.preventDefault();
-    const dataToSend = Object.keys(formState).map((element) => {
-      return { [element]: formState[element].value };
-    });
-    dataToSend.pop();
-    console.log(dataToSend);
-  };
-
   return (
-    <FormStyled onSubmit={sendData}>
+    <FormStyled onSubmit={(e) => sendData(e, formState)}>
       <FormInputsContainerStyled>
         <FormInputsBlockStyled>
           <Input
             // invalid={!formState.name.isValid && formState.name.isTouched}
             variant='primary'
-            type="text"
+            type='text'
             name='name'
             placeholder='name'
             onInput={changeHandler}
@@ -69,7 +61,7 @@ const Form = () => {
             validators={[VALIDATOR_MINLENGTH(4)]}
           />
           <Input
-            type="text"
+            type='text'
             variant='primary'
             name='mail'
             placeholder='mail'
@@ -80,7 +72,7 @@ const Form = () => {
         <FormInputsBlockStyled>
           <Input
             variant='textarea'
-            type="textarea"
+            type='textarea'
             name='message'
             placeholder='message'
             onInput={changeHandler}

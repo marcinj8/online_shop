@@ -14,13 +14,14 @@ const InputReducer = (state, action) => {
     case 'TOUCHED':
       return {
         ...state,
+        isValid: validate(action.value, action.validators),
         isTouched: true,
       };
     case 'INPUT_CHANGED':
       return {
         ...state,
-        value: action.value,
         isValid: validate(action.value, action.validators),
+        value: action.value,
       };
     default:
       return state;
@@ -73,9 +74,12 @@ const Input = (props) => {
     });
   };
 
-  const touchedHandler = () => {
+  const touchedHandler = (e) => {
+    const value = e.target.value;
     dispatch({
       type: 'TOUCHED',
+      value,
+      validators,
     });
   };
 

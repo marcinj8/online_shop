@@ -5,7 +5,7 @@ import { Button } from '../../shared/components/button';
 import {
   SyledItemListCart,
   SyledItemListTitleCart,
-} from './purchasedList.scss';
+} from '../style/purchasedList.scss';
 
 const PurchasedList = ({
   updatedProducts,

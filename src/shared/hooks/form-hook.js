@@ -25,24 +25,21 @@ const onInputChange = (state, name, value, isValid) => {
 };
 
 const onClearInputs = (state) => {
-  console.log(state.inputs)
-  const clearedInputs ={};
+  console.log(state.inputs);
+  const clearedInputs = {};
   for (let input in state.inputs) {
     clearedInputs[input] = {
-      ...state.inputs[input] = {
+      ...(state.inputs[input] = {
         value: '',
-        isValid: false
-      }
-    }
+        isValid: false,
+      }),
+    };
   }
- 
-  console.log('onClearInputs', clearedInputs);
+
   return {
     ...state,
-    //   inputs : {
-    //     ...state.inputs = clearedInputs
-    //   },
-    //   isFormValid: false
+    inputs: clearedInputs,
+    isFormValid: false,
   };
 };
 

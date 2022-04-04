@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,11 +14,12 @@ import { Footer } from './footer';
 import { ContactPage } from './contactForm';
 import { Auth } from './auth';
 import { Cart } from './cart';
+import { MyProfile } from './myProfile';
+
+import { isUserLoogedIn, logoutUser } from './store/actions/userActions';
 
 import './App.css';
-import { useSelector, useDispatch } from 'react-redux';
-import { isUserLoogedIn, logoutUser } from './store/actions/userActions';
-import { MyProfile } from './myProfile';
+import { getUserCart } from './store/actions/cartActions';
 
 function App() {
   const dispatch = useDispatch();
@@ -71,6 +73,18 @@ function App() {
   useEffect(() => {
     dispatch(isUserLoogedIn());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (userData) {
+      dispatch(getUserCart(userData.token));
+    }
+  }, [dispatch, userData]);
+
+  useEffect(() => {
+    window.onbeforeunload = function () {
+      window.scrollTo(0, 0);
+    };
+  });
 
   useEffect(() => {
     if (!!userData && !remainingTime.current) {

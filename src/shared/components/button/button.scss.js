@@ -18,6 +18,9 @@ export const StyledButton = styled.button`
   text-shadow: ${(props) => (props.textShadow ? props.textShadow : 'none')};
   font-size: ${(props) => (props.fontSize ? props.fontSize : '1rem')};
   font-weight: ${(props) => (props.fontWeight ? props.fontWeight : 'normal')};
+  :hover {
+    background: ${(props) => (props.hoverBg ? props.hoverBg : 'transparent')};
+  }
   &:disabled {
     cursor: not-allowed;
     color: gray;

@@ -13,7 +13,7 @@ export const slideHorizontally = (
   const tl = gsap.timeline();
 
   tl.addLabel('start')
-    .to(
+    .set(
       element,
       {
         visibility: 'visible',
@@ -44,7 +44,7 @@ export const slideVertically = (
   const tl = gsap.timeline();
 
   tl.addLabel('start')
-    .to(
+    .set(
       element,
       {
         visibility: 'visible',

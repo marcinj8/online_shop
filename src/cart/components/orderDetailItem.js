@@ -4,7 +4,7 @@ import { Input } from '../../shared/components/input';
 import {
   StyledOrderDetailsListItem,
   StyledOrderDetailsDescription,
-} from './OrderDetailItem.scss';
+} from '../style/orderDetailItem.scss';
 
 const OrderDatailItem = ({
   itemType,
@@ -14,15 +14,20 @@ const OrderDatailItem = ({
   isEditMode,
   formState,
   changeHandler,
+  userCart,
 }) => {
+
+  // if (itemName === 'city' && formState.inputs && userCart) {
+  //   console.log(formState.inputs, 'input||cart', userCart.addressOfDelivery);
+  // }
 
   return (
     <StyledOrderDetailsListItem>
       <h5 style={{ marginLeft: '45px' }}>{itemPlaceholder.toUpperCase()}:</h5>
       {!isEditMode && (
         <StyledOrderDetailsDescription style={{}}>
-          {formState.inputs[itemName].value
-            ? formState.inputs[itemName].value
+          {userCart && userCart.addressOfDelivery !== undefined
+            ? userCart.addressOfDelivery[itemName]
             : `Please type ${itemPlaceholder}.`}
         </StyledOrderDetailsDescription>
       )}
@@ -33,7 +38,7 @@ const OrderDatailItem = ({
           name={itemName}
           initialValue={formState.inputs[itemName].value}
           onInput={changeHandler}
-          styled={{margin: '10px 0'}}
+          styled={{ margin: '10px 0' }}
           validators={itemVlaidators}
         />
       )}

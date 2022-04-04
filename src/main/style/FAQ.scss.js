@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import faqBg from '../assets/faqBg.png';
+import faqBg from '../../assets/faqBg.png';
 
 export const FAQPageStyled = styled.section`
     overflow: hidden;

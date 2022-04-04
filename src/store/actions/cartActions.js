@@ -1,10 +1,12 @@
 import Axios from 'axios';
+
 import { UserCart } from '../../shared/models/userCartModel';
 
 import { setLoading, errorHandler } from './commonActions';
 
 const updateBasket = (cartUpdated) => {
   const userCartData = JSON.parse(cartUpdated);
+  console.log(userCartData);
   const userCart = new UserCart(
     userCartData.userId,
     userCartData._id,
@@ -76,7 +78,6 @@ export const updateProductsInCart = (products, token) => {
       }
     )
       .then((res) => {
-        console.log(res.data);
         dispatch(updateProducts(res.data.products));
       })
       .catch((err) => {
@@ -85,11 +86,16 @@ export const updateProductsInCart = (products, token) => {
   };
 };
 
+const setUpdatedAddressOfDelivery = (address) => {
+  return {
+    type: 'UPDATE_ADDRESS',
+    address,
+  };
+};
+
 export const updateAddressOfDelivery = (addressData, userData) => {
-  // token expiration? undefined
   let addressOfDelivery = {};
   for (let property in addressData) {
-    console.log(property, addressData[property].value);
     addressOfDelivery[property] = addressData[property].value;
   }
 
@@ -104,7 +110,7 @@ export const updateAddressOfDelivery = (addressData, userData) => {
     )
       .then((res) => {
         console.log(res);
-        dispatch(setLoading('SET_LOADING_CART', false));
+        dispatch(setUpdatedAddressOfDelivery(addressOfDelivery));
       })
       .catch((err) => {
         console.log(err);
@@ -117,5 +123,37 @@ export const toggleCartVisibility = (isCartVisible) => {
   return {
     type: 'SET_VISIBILITY_CART',
     showCart: isCartVisible,
+  };
+};
+
+export const onPlaceOrder = (orderData, token) => {
+  const { userId, id, products, addressOfDelivery } = orderData;
+  console.log(orderData);
+  return (dispatch) => {
+    Axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/cart/place-order`,
+      {
+        orderData: JSON.stringify({
+          userId,
+          id,
+          products,
+          addressOfDelivery,
+          payment: 'card', // dodać wybór metody płatności
+        }),
+      },
+      { headers: { Authorization: 'Bearer ' + token } }
+    )
+      .then((res) => {
+        console.log(res);
+        dispatch({
+          type: 'TEST',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: 'TEST',
+        });
+      });
   };
 };

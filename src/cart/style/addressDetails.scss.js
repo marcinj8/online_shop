@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const StyledAddressData = styled.div`
-  /* height: ${(props) => (props.show ? 'auto' : '0px')}; */
-  /* display: ${(props) => (props.show ? 'block' : 'none')}; */
   border-bottom: 1px solid black;
   height: 0;
   width: 0;

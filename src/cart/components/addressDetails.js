@@ -6,22 +6,25 @@ import { useForm } from '../../shared/hooks/form-hook';
 import OrderDatailItem from './orderDetailItem';
 
 import { updateAddressOfDelivery } from '../../store/actions/cartActions';
-import {
-  StyledAddressData,
-  StyledOrderDetailsList,
-  StyledOrderDetailsHeader,
-} from './orderDetails.scss';
-import { formData } from '../data/cartData';
+
+import { formData, setInitialValues } from '../data/cartData';
 
 import { rollUp } from '../../shared/animations/onHideAnimation';
 import { rollDown } from '../../shared/animations/onShowAnimation';
 import OrderDetailsControllers from './orderDetailsControllers';
 
-const OrderDetails = () => {
+import {
+  StyledAddressData,
+  StyledOrderDetailsList,
+} from '../style/addressDetails.scss';
+
+const OrderDetails = ({ show }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+
   const addressDataRef = useRef(null);
-  const showCart = useSelector((state) => state.cart.showCart);
+
+  // const show = useSelector((state) => state.cart.showCart);
   const userCart = useSelector((state) => state.cart.userCart);
   const user = useSelector((state) => state.user.userData);
   const dispatch = useDispatch();
@@ -51,23 +54,14 @@ const OrderDetails = () => {
   };
 
   useEffect(() => {
-    if (userCart && userCart.addressOfDelivery && !formState.isFormValid) {
-      const initialValues = {};
-      for (let property in userCart.addressOfDelivery) {
-        initialValues[property] = {
-          value: userCart.addressOfDelivery[property],
-          isValid: true,
-        };
-      }
-      setFormData(initialValues, true);
-    }
+    setInitialValues(userCart, formState, setFormData);
   }, [userCart, formState, setFormData]);
 
   useEffect(() => {
-    if (!showCart) {
+    if (!show) {
       setShowDetails(false);
     }
-  }, [showCart]);
+  }, [show]);
 
   useEffect(() => {
     if (showDetails) {
@@ -77,13 +71,12 @@ const OrderDetails = () => {
     }
   }, [addressDataRef, showDetails]);
 
-  if (!showCart) {
+  if (!show) {
     return null;
   }
 
   return (
     <React.Fragment>
-      <StyledOrderDetailsHeader>order details</StyledOrderDetailsHeader>
       <StyledAddressData ref={addressDataRef} show={showDetails}>
         <h4>address of delivery</h4>
         <StyledOrderDetailsList>{orderDetailsList}</StyledOrderDetailsList>

@@ -32,8 +32,26 @@ const updateUserProducts = (state, products) => {
       products: products,
       cartValidation: validateCart(
         products,
-        state.addressOfDelivery,
-        state.payment
+        state.userCart.addressOfDelivery,
+        state.userCart.payment
+      ),
+    },
+    loading: false,
+    error: false,
+  };
+};
+
+const updateAddress = (state, addressOfDelivery) => {
+  console.log(state);
+  return {
+    ...state,
+    userCart: {
+      ...state.userCart,
+      addressOfDelivery,
+      cartValidation: validateCart(
+        state.userCart.products,
+        addressOfDelivery,
+        state.userCart.payment
       ),
     },
     loading: false,
@@ -77,6 +95,8 @@ const cartReducer = (state = initialState, action) => {
       return updateUserCart(state, action.userCart);
     case 'UPDATE_PRODUCTS':
       return updateUserProducts(state, action.products);
+    case 'UPDATE_ADDRESS':
+      return updateAddress(state, action.address);
     case 'SET_VISIBILITY_CART':
       return {
         ...state,

@@ -5,10 +5,11 @@ import { AsyncView } from '../../shared/asyncView';
 import { Button } from '../../shared/components/button';
 import { Modal } from '../../shared/modal';
 import PurchasedList from '../components/purchasedList';
-import OrderDetails from '../components/orderDetails';
+import AddressDetails from '../components/addressDetails';
 
 import {
   getUserCart,
+  onPlaceOrder,
   toggleCartVisibility,
   updateProductsInCart,
 } from '../../store/actions/cartActions';
@@ -28,6 +29,7 @@ import {
   StyledCartList,
   StyledCardControllers,
 } from './cart.scss';
+import { StyledOrderDetailsHeader } from '../style/addressDetails.scss';
 
 const Cart = () => {
   const cartState = useSelector((state) => state.cart);
@@ -67,8 +69,7 @@ const Cart = () => {
 
   useEffect(() => {
     if (
-      cartState.userCart &&
-      cartState.userCart.products &&
+      cartState.userCart?.products &&
       updatedProducts === null
     ) {
       const copiedProducts = makeCopy(cartState.userCart.products);
@@ -144,7 +145,8 @@ const Cart = () => {
           Total: {cartState.userCart && updatedTotalCost ? updatedTotalCost : 0}{' '}
           Eur
         </StyledCartTotal>
-        <OrderDetails />
+        <StyledOrderDetailsHeader>order details</StyledOrderDetailsHeader>
+        <AddressDetails show={cartState.showCart} />
       </StyledCartContent>
       <StyledCardControllers>
         <Button
@@ -172,7 +174,7 @@ const Cart = () => {
               setUpdatedProducts,
               products,
               toggleCartVisibility,
-              true,
+              false,
               dispatch
             )
           }
@@ -183,7 +185,9 @@ const Cart = () => {
         disabled={!isCartValid}
         template='ORDER'
         styled={{ background: 'rgba(162, 222, 208, .6)' }}
-        clicked={() => console.log('ordered', cartState.userCart)}
+        clicked={() =>
+          dispatch(onPlaceOrder(cartState.userCart, userData.token))
+        }
       />
       <Button
         buttonType='primary'

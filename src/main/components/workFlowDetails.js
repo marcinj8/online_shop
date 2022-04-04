@@ -6,7 +6,7 @@ import {
     WorkFlowDetailsSectionStyled,
     WorkFlowTitleStyled,
     WorkFlowDetailsArticleStyled
-} from './workFlowDetails.scss';
+} from '../style/workFlowDetails.scss';
 
 const WorkFlowDetails = () => {
 

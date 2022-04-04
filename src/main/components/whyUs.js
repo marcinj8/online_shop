@@ -2,20 +2,20 @@ import React from 'react';
 
 import WhyUsParagraph from './whyUsParagraph';
 
-import { WhyUsPageStyled, WhyUsParagraphTitleStyled, WhyUsParagraphListStyled } from './whyUs.scss';
+import { WhyUsPageStyled, WhyUsParagraphTitleStyled, WhyUsParagraphListStyled } from '../style/whyUs.scss';
 
 
 const WHY_US = [
-    'Lorem ipsum dolor',
     'Curabitur vel nibh sagittis',
+    'Lorem ipsum dolor',
     'Etiam tempor mi sed',
     'Mauris vel nisi ac sem',
     'Vivamus eu felis venenatis'
 ];
 
 const IMG_TITLE = [
-    'warehouse',
     'assistants',
+    'warehouse',
     'truck',
     'delivery',
     'phone'

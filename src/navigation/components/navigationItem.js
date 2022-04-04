@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { NavigationItemStyled } from "./navigationItem.scss";
+import { NavigationItemStyled } from "../style/navigationItem.scss";
 
 const NavigationItem = ({ name, link, conditions }) => {
   const userState = useSelector((state) => state.user);

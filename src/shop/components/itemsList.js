@@ -39,19 +39,14 @@ const ItemsList = () => {
 
   return (
     <React.Fragment>
-      <AsyncView
+      {!cartState.showCart && <AsyncView
         isLoading={productsState.loading}
         isError={productsState.error}
         errorMessage={productsState.errorMessage}
         hideBackdrop
-      />
+      />}
       {!productsState.loading && !productsState.error && itemsList && (
         <React.Fragment>
-          <AsyncView
-            isLoading={cartState.loading}
-            isError={cartState.error}
-            errorMessage={cartState.errorMessage}
-          />
           <div>
             <StyledItemsListNav>
               <label htmlFor="shopCategories">Category </label>

@@ -50,6 +50,20 @@ export const formData = {
   },
 };
 
+export const setInitialValues = (userCart, formState, setFormData) => {
+  if (userCart && userCart.addressOfDelivery && !formState.isFormValid) {
+    const initialValues = {};
+    for (let property in userCart.addressOfDelivery) {
+      initialValues[property] = {
+        value: userCart.addressOfDelivery[property],
+        isValid: true,
+      };
+    }
+
+    setFormData(initialValues, true);
+  }
+};
+
 const validateAddressOfDelivery = (addressOfDelivery) => {
   let isValid = true;
   let counter = 0;
@@ -83,7 +97,6 @@ export const checkIsCartValid = (validationArr) => {
   let isValid = true;
   for (let key in validationArr) {
     isValid = isValid && validationArr[key];
-    console.log(validationArr[key]);
   }
   return isValid;
 };

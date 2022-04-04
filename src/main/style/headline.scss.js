@@ -7,9 +7,13 @@ export const HeadlineStyled = styled.header`
 `;
 
 export const HeadlineImageStyled = styled.img`
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: ${props => props.isDisplayed ? 2 : 1}
 `;
 
 export const HeadlineTitleStyled = styled.h1`
@@ -53,6 +57,7 @@ export const SliderRightButtonStyled = styled.img`
 export const DotsNavSliderStyled = styled.div`
     position: absolute;
     bottom: 10%;
+    z-index: 5;
     left: 50%;
     display: flex;
     justify-content: space-around;

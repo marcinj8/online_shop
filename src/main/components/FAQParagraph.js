@@ -4,9 +4,9 @@ import {
     FAQParagraphStyled,
     FAQParagraphImageStyled,
     FAQParagraphTextStyled
-} from './FAQ.scss';
+} from '../style/FAQ.scss';
 
-import { showFAQ } from './mainPageAnimations';
+import { showFAQ } from '../animations/mainPageAnimations';
 
 const FAQParagraph = ({ question, answer }) => {
 

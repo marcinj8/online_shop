@@ -7,19 +7,23 @@ export const logoutUser = () => {
   return { type: 'LOGOUT_USER' };
 };
 
-const setUserData = (response) => {
-  const { email, id, token, tokenExpiration } = response.data;
+const setUserData = (response, tokenExpiration) => {
+  console.log(response.data);
+  const { email, id, userName, token } = response.data;
+
   const tokenExpirationDate =
-    tokenExpiration || new Date(new Date().getTime() + 1000 * 360);
-  const currentDate = new Date().getTime();
-  const remainingTime = new Date(tokenExpirationDate).getTime() - currentDate;
+    new Date(tokenExpiration) || new Date(new Date().getTime() + 1000 * 3600);
+
+  const currentDateTime = new Date().getTime();
+  const remainingTime =
+    new Date(tokenExpirationDate).getTime() - currentDateTime;
 
   localStorage.setItem(
     'userData',
     JSON.stringify({
       token,
       email,
-      tokenExpiration: tokenExpirationDate.toISOString(),
+      tokenExpiration: tokenExpirationDate,
       id,
     })
   );
@@ -32,6 +36,7 @@ const setUserData = (response) => {
       token,
       tokenExpirationDate,
       remainingTime,
+      userName,
     },
   };
 };
@@ -41,7 +46,6 @@ export const getUserData = (id, email, token, tokenExpiration) => {
     id,
     email,
     token,
-    tokenExpiration,
   };
 
   return async (dispatch) => {
@@ -60,7 +64,7 @@ export const getUserData = (id, email, token, tokenExpiration) => {
     } catch (err) {
       return dispatch(errorHandler('SET_ERROR_USER_DATA', err));
     }
-    dispatch(setUserData(response));
+    dispatch(setUserData(response, tokenExpiration));
   };
 };
 
@@ -100,7 +104,7 @@ export const registerUser = (email, userName, password) => {
     } catch (err) {
       return dispatch(errorHandler('SET_ERROR_USER_DATA', err));
     }
-    dispatch(setUserData(response));
+    dispatch(setUserData(response, response.data.tokenExpiration));
   };
 };
 
@@ -122,6 +126,6 @@ export const signInUser = (email, password) => {
     } catch (err) {
       return dispatch(errorHandler('SET_ERROR_USER_DATA', err));
     }
-    dispatch(setUserData(response));
+    dispatch(setUserData(response, response.data.tokenExpiration));
   };
 };

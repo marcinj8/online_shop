@@ -2,7 +2,7 @@ import React from 'react';
 
 import FAQParagraph from './FAQParagraph';
 
-import { FAQPageStyled, FAQParagraphTitleStyled, FAQParagraphListStyled } from './FAQ.scss';
+import { FAQPageStyled, FAQParagraphTitleStyled, FAQParagraphListStyled } from '../style/FAQ.scss';
 
 const FAQ_QAA = [
     ['Lorem ipsum dolor?', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer laoreet, lorem ut iaculis tincidunt, libero est vehicula est, quis hendrerit purus ligula a eros.'],
